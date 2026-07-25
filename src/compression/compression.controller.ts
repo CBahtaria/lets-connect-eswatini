@@ -1,4 +1,5 @@
-import { Controller, Post, Body, HttpCode, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, BadRequestException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { MitochondrionNode, ClientPayload } from './mitochondrion.node';
 
 @Controller('compress')
@@ -7,6 +8,7 @@ export class CompressionController {
 
   @Post('process')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
   async process(@Body() body: { clientId: string; contentType: string; data: string }) {
     if (!body.clientId || !body.data) throw new BadRequestException('clientId and data required');
     const payload: ClientPayload = {
