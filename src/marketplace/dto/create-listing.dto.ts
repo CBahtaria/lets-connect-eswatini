@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsEnum, IsNotEmpty, Min } from 'class-validator'
+import { IsString, IsInt, IsEnum, IsNotEmpty, Min } from 'class-validator'
 
 export enum ListingCategory {
   SERVICES = 'services',
@@ -17,8 +17,8 @@ export class CreateListingDto {
   @IsEnum(ListingCategory)
   category: ListingCategory
 
-  @IsNumber() @Min(0)
-  price: number
+  @IsInt() @Min(0)
+  priceCents: number
 
   @IsString()
   currency: 'SZL' | 'ZAR' = 'SZL'

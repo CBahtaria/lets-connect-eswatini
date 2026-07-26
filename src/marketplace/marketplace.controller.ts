@@ -1,7 +1,22 @@
-import { Controller, Get, Post, Delete, Param, Body, Query, UseGuards, Request } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+  Request,
+} from '@nestjs/common'
 import { MarketplaceService } from './marketplace.service'
 import { CreateListingDto } from './dto/create-listing.dto'
+import { CreateRfqDto } from './dto/create-rfq.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+
+interface JwtRequest {
+  user: { userId: string }
+}
 
 @Controller('marketplace')
 export class MarketplaceController {
@@ -9,10 +24,21 @@ export class MarketplaceController {
 
   @Get()
   findAll(
-    @Query('category') category?: string,
-    @Query('location') location?: string,
+    @Query()
+    query: { category?: string; location?: string; page?: string; limit?: string },
   ) {
-    return this.service.findAll(category, location)
+    return this.service.findAll({
+      category: query.category,
+      location: query.location,
+      page: query.page !== undefined ? parseInt(query.page, 10) : undefined,
+      limit: query.limit !== undefined ? parseInt(query.limit, 10) : undefined,
+    })
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('admin/stats')
+  adminStats() {
+    return this.service.adminStats()
   }
 
   @Get(':id')
@@ -22,14 +48,19 @@ export class MarketplaceController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Request() req: { user: { userId: string } }, @Body() dto: CreateListingDto) {
-    return this.service.create(req.user?.userId ?? 'anonymous', dto)
+  create(@Request() req: JwtRequest, @Body() dto: CreateListingDto) {
+    return this.service.create(req.user.userId, dto)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('rfq')
+  createRfq(@Request() req: JwtRequest, @Body() dto: CreateRfqDto) {
+    return this.service.createRfq(req.user.userId, dto)
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    this.service.remove(id)
-    return { deleted: true }
+  remove(@Param('id') id: string, @Request() req: JwtRequest) {
+    return this.service.remove(id, req.user.userId)
   }
 }
