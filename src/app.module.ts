@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './redis/redis.module';
 import { UsersModule } from './users/users.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MarketplaceModule } from './marketplace/marketplace.module';
     HealthModule,
     OptimizationModule,
     MarketplaceModule,
+    PostsModule,
   ],
 })
 export class AppModule {}
