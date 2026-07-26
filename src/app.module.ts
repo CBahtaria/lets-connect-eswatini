@@ -7,6 +7,7 @@ import { OptimizationModule } from './optimization/optimization.module';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './redis/redis.module';
 import { UsersModule } from './users/users.module';
+import { MarketplaceModule } from './marketplace/marketplace.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
     ModerationModule,
     HealthModule,
     OptimizationModule,
+    MarketplaceModule,
   ],
 })
 export class AppModule {}
