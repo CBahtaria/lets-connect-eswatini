@@ -19,6 +19,15 @@ export class User {
   @Column({ nullable: true })
   displayName?: string;
 
+  @Column({ nullable: true })
+  password_hash: string;
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  locked_until: Date | null;
+
+  @Column({ default: 0 })
+  otp_attempts: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

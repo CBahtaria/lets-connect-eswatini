@@ -9,6 +9,7 @@ import { RedisModule } from './redis/redis.module';
 import { UsersModule } from './users/users.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { PostsModule } from './posts/posts.module';
+import { NatsModule } from './nats/nats.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PostsModule } from './posts/posts.module';
     OptimizationModule,
     MarketplaceModule,
     PostsModule,
+    NatsModule,
   ],
 })
 export class AppModule {}
